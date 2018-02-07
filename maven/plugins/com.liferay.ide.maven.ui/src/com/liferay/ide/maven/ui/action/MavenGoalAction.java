@@ -93,13 +93,19 @@ public abstract class MavenGoalAction extends AbstractObjectAction {
 				catch (CoreException ce) {
 				}
 
-				Job job = new Job(p.getName() + " - " + getMavenGoals()) {
+				Job job = new Job("build " + p.getName()) {
 
 					@Override
 					protected IStatus run(IProgressMonitor monitor) {
 						try {
 							if (plugin == null) {
 								return ProjectUI.createErrorStatus("Can't find any plugins for " + getMavenGoals());
+							}
+
+							IStatus status = _pluginValidate(plugin, monitor);
+
+							if (status != Status.OK_STATUS) {
+								return status;
 							}
 
 							monitor.beginTask(getMavenGoals(), 100);
@@ -117,7 +123,7 @@ public abstract class MavenGoalAction extends AbstractObjectAction {
 							monitor.worked(10);
 						}
 						catch (Exception e) {
-							return ProjectUI.createErrorStatus("Error running Maven goal " + getMavenGoals(), e);
+							return ProjectUI.createErrorStatus("Error running Maven goal: ", e);
 						}
 
 						return Status.OK_STATUS;
@@ -162,6 +168,18 @@ public abstract class MavenGoalAction extends AbstractObjectAction {
 			LiferayMavenUI.logError("Error refreshing project after " + getMavenGoals(), ce);
 		}
 	}
+	
+	private IStatus _pluginValidate(Plugin plugin, IProgressMonitor monitor) {
+		String pluginVersion = plugin.getVersion();
+
+		if (pluginVersion == null || !pluginVersion.matches(_OSGI_VERSION_PATTERN)) {
+			return ProjectUI.createErrorStatus(
+				"'" + pluginVersion + "' is not a valid plugin version defined in pom.xml"
+			);
+		}
+
+		return Status.OK_STATUS;
+	}
 
 	private void _runMavenGoal(IFile pomFile, String goal, IProgressMonitor monitor) throws CoreException {
 		IMavenProjectRegistry projectManager = MavenPlugin.getMavenProjectRegistry();
@@ -173,4 +191,5 @@ public abstract class MavenGoalAction extends AbstractObjectAction {
 		builder.runMavenGoal(projectFacade, goal, "run", monitor);
 	}
 
+	public static final String _OSGI_VERSION_PATTERN = "[0-9]+\\.[0-9]+\\.[0-9]+(\\.[0-9A-Za-z_-]+)?";
 }
