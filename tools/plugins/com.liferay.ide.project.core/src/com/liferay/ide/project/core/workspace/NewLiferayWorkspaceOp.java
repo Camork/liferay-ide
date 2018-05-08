@@ -83,9 +83,6 @@ public interface NewLiferayWorkspaceOp extends BaseLiferayWorkspaceOp {
 	@ValidFileSystemResourceType(FileSystemResourceType.FOLDER)
 	public ValueProperty PROP_LOCATION = new ValueProperty(TYPE, "Location");
 
-	@Service(impl = NewLiferayWorkspaceServerNameService.class)
-	public ValueProperty PROP_SERVER_NAME = new ValueProperty(TYPE, BaseLiferayWorkspaceOp.PROP_SERVER_NAME);
-
 	@DefaultValue(text = "true")
 	@Label(standard = "use default location")
 	@Listeners(WorkspaceUseDefaultLocationListener.class)

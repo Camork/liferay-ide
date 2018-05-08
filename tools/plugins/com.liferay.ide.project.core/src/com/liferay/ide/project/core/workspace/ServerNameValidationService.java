@@ -33,9 +33,12 @@ public class ServerNameValidationService extends ValidationService {
 
 		String serverName = serverNameValue.content();
 
-		if (ServerPlugin.isNameInUse(null, serverName)) {
-			retval = Status.createErrorStatus(
-				"The server or runtime name is already in use. Specify a different name.");
+		if (serverName == null) {
+			retval = Status.createErrorStatus("Server name could not be empty.");
+		}
+		else if (ServerPlugin.isNameInUse(null, serverName)) {
+			retval =
+				Status.createErrorStatus("The server or runtime name is already in use. Specify a different name.");
 		}
 
 		return retval;

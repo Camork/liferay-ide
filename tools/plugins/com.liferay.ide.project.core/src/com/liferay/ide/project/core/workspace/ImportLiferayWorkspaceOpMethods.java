@@ -74,9 +74,15 @@ public class ImportLiferayWorkspaceOpMethods {
 
 			boolean hasBundlesDir = hasRuntimeDir.content();
 
-			Value<String> serverNameValue = op.getServerName();
+			String serverName = null;
 
-			String serverName = serverNameValue.content();
+			Value<Boolean> useDefaultServerName = op.getUseDefaultServerName();
+
+			if (useDefaultServerName.content()) {
+				Value<String> serverNameValue = op.getServerName();
+
+				serverName = serverNameValue.content();
+			}
 
 			if (initBundle && !hasBundlesDir) {
 				Value<String> bundleUrl = op.getBundleUrl();

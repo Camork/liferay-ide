@@ -22,6 +22,7 @@ import org.eclipse.sapphire.Type;
 import org.eclipse.sapphire.Value;
 import org.eclipse.sapphire.ValueProperty;
 import org.eclipse.sapphire.modeling.annotations.DefaultValue;
+import org.eclipse.sapphire.modeling.annotations.Enablement;
 import org.eclipse.sapphire.modeling.annotations.Label;
 import org.eclipse.sapphire.modeling.annotations.Service;
 
@@ -39,6 +40,8 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 	public Value<Boolean> getProvisionLiferayBundle();
 
 	public Value<String> getServerName();
+	
+	public Value<Boolean> getUseDefaultServerName();
 
 	public void setBundleUrl(String value);
 
@@ -51,6 +54,8 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 	public void setProvisionLiferayBundle(String value);
 
 	public void setServerName(String value);
+
+	public void setUseDefaultServerName(Boolean value);
 
 	public final String LIFERAY_70_BUNDLE_URL =
 		"https://cdn.lfrs.sl/releases.liferay.com/portal/7.0.4-ga5/liferay-ce-portal-tomcat-7.0-ga5-20171018150113838.zip";
@@ -81,7 +86,13 @@ public interface BaseLiferayWorkspaceOp extends ExecutableElement {
 
 	// ServerName
 
+	@Enablement(expr = "${ useDefaultServerName == 'false' }")
 	@Service(impl = ServerNameValidationService.class)
 	public ValueProperty PROP_SERVER_NAME = new ValueProperty(TYPE, "serverName");
+
+	@DefaultValue(text = "true")
+	@Label(standard = "Use server information as server name")
+	@Type(base = Boolean.class)
+	public ValueProperty PROP_USE_DEFAULT_SERVER_NAME = new ValueProperty(TYPE, "useDefaultServerName");
 
 }

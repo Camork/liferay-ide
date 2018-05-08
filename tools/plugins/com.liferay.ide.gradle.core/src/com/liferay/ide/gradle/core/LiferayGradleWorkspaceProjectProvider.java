@@ -106,15 +106,19 @@ public class LiferayGradleWorkspaceProjectProvider
 		boolean initBundle = provisionLiferayBundleValue.content();
 
 		if (initBundle) {
-			Value<String> bundleUrlValue = op.getBundleUrl();
+			Value<String> bundleUrl = op.getBundleUrl();
 
-			String bundleUrl = bundleUrlValue.content(false);
+			Value<Boolean> useDefaultServerName = op.getUseDefaultServerName();
 
-			Value<String> serverNameValue = op.getServerName();
+			String serverName = null;
 
-			String serverName = serverNameValue.content(true);
+			if (!useDefaultServerName.content()) {
+				Value<String> serverNameValue = op.getServerName();
 
-			initBundle(bundleUrl, serverName, workspaceName);
+				serverName = serverNameValue.content();
+			}
+
+			initBundle(bundleUrl.content(), serverName, workspaceName);
 		}
 
 		return Status.OK_STATUS;

@@ -48,13 +48,22 @@
                     <label>Download Liferay bundle</label>
                     <property>provisionLiferayBundle</property>
                 </property-editor>
+                <spacer></spacer>
                 <property-editor>
-                    <visible-when>${ provisionLiferayBundle == 'true' }</visible-when>
-                    <property>serverName</property>
-                </property-editor>
-                <property-editor>
+                    <margin-left>25</margin-left>
                     <visible-when>${ provisionLiferayBundle == 'true' }</visible-when>
                     <property>bundleUrl</property>
+                </property-editor>
+                <spacer></spacer>
+                <property-editor>
+                    <margin-left>25</margin-left>
+                    <visible-when>${ provisionLiferayBundle == 'true' }</visible-when>
+                    <property>useDefaultServerName</property>
+                </property-editor>
+                <property-editor>
+                    <margin-left>25</margin-left>
+                    <visible-when>${ provisionLiferayBundle == 'true' }</visible-when>
+                    <property>serverName</property>
                 </property-editor>
                 <spacer></spacer>
                 <custom>

@@ -99,9 +99,17 @@ public class LiferayMavenWorkspaceProjectProvider
 		if (initBundle.content()) {
 			Value<String> bundleUrl = op.getBundleUrl();
 
-			Value<String> serverName = op.getServerName();
+			Value<Boolean> useDefaultServerName = op.getUseDefaultServerName();
 
-			initBundle(bundleUrl.content(), serverName.content(), workspaceName);
+			String serverName = null;
+
+			if (!useDefaultServerName.content()) {
+				Value<String> serverNameValue = op.getServerName();
+
+				serverName = serverNameValue.content();
+			}
+
+			initBundle(bundleUrl.content(), serverName, workspaceName);
 		}
 
 		return Status.OK_STATUS;
